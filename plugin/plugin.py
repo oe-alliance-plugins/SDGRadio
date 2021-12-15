@@ -372,52 +372,53 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		print("[SDGRadio] playRadio cmd: %s" % cmd)
 		self.console.execute(cmd)
 
-	def processRds(self, data):
+	def processRds(self, d):
+		data = d.encode(encoding = "utf8", errors = "ignore")
 		try:
 			rds = json.loads(data.decode("utf8", "ignore"))
 
-			if "ps" in rds and self.getTitle() != rds["ps"].encode("utf8"):
-				self.setTitle(rds["ps"].encode("utf8"))
+			if "ps" in rds and self.getTitle() != rds["ps"]:
+				self.setTitle(str(rds["ps"]))
 				self["pic"].hide()
 				self["ps_icon"].show()
 
-			if "partial_ps" in rds and self.getTitle() != rds["partial_ps"].encode("utf8"):
-				self.setTitle(rds["partial_ps"].encode("utf8"))
+			if "partial_ps" in rds and self.getTitle() != rds["partial_ps"]:
+				self.setTitle(str(rds["partial_ps"]))
 				self["pic"].hide()
 				self["ps_icon"].show()
 
-			if "radiotext" in rds and self["radiotext"].getText() != rds["radiotext"].encode("utf8"):
-				self["radiotext"].setText(rds["radiotext"].encode("utf8"))
+			if "radiotext" in rds and self["radiotext"].getText() != rds["radiotext"]:
+				self["radiotext"].setText(str(rds["radiotext"]))
 				self["rt_icon"].show()
 
-			if "partial_radiotext" in rds and self["radiotext"].getText() != rds["partial_radiotext"].encode("utf8"):
-				self["radiotext"].setText(rds["partial_radiotext"].encode("utf8"))
+			if "partial_radiotext" in rds and self["radiotext"].getText() != rds["partial_radiotext"]:
+				self["radiotext"].setText(str(rds["partial_radiotext"]))
 				self["rt_icon"].show()
 
-			if "prog_type" in rds and self["prog_type"].getText() != rds["prog_type"].encode("utf8"):
-				self["prog_type"].setText(rds["prog_type"].encode("utf8"))
+			if "prog_type" in rds and self["prog_type"].getText() != rds["prog_type"]:
+				self["prog_type"].setText(str(rds["prog_type"]))
 
-			if "pi" in rds and not "callsign" in rds and self["pi"].getText() != rds["pi"].encode("utf8"):
-				self["pi"].setText(rds["pi"].encode("utf8").replace("0x", "PI: "))
+			if "pi" in rds and not "callsign" in rds and self["pi"].getText() != rds["pi"]:
+				self["pi"].setText(str(rds["pi"]).replace("0x", "PI: "))
 
-			if "callsign" in rds and self["pi"].getText() != rds["callsign"].encode("utf8"):
-				self["pi"].setText(rds["callsign"].encode("utf8"))
+			if "callsign" in rds and self["pi"].getText() != rds["callsign"]:
+				self["pi"].setText(str(rds["callsign"]))
 
-			if "callsign_uncertain" in rds and self["pi"].getText() != rds["callsign_uncertain"].encode("utf8"):
-				self["pi"].setText(rds["callsign_uncertain"].encode("utf8"))
+			if "callsign_uncertain" in rds and self["pi"].getText() != rds["callsign_uncertain"]:
+				self["pi"].setText(str(rds["callsign_uncertain"]))
 
 			if "pi" in rds and not str(rds["pi"]) == "0x0000" or "callsign" in rds or "callsign_uncertain" in rds or "pi" in rds and str(rds["pi"]) == "0x0000" or "partial_ps" in rds and str(rds["pi"]) == "0x0000":
 				self["rds_icon"].show()
 
 			if "programType" in rds:
-				txt = u"%s kbps %s %s" % (rds["bitrate"], rds["dabType"], rds["programType"])
-				self["prog_type"].setText(txt.encode("utf8"))
+				txt = u"%s kbps %s %s" % (str(rds["bitrate"]), str(rds["dabType"]), str(rds["programType"]))
+				self["prog_type"].setText(txt)
 
 			if "programName" in rds and "programId" in rds:
-				self.programs.append((rds["programName"].encode("utf8"), rds["programId"]))
+				self.programs.append((str(rds["programName"]), str(rds["programId"])))
 
 			if "mot" in rds:
-				self.showPicture(rds["mot"].encode("utf8"))
+				self.showPicture(rds["mot"])
 
 			if "alt_kilohertz" in rds and self["af"].getText() != rds["alt_kilohertz"]:
 				self["af"].setText("AF")
@@ -480,8 +481,9 @@ class SDGRadioScreen(Screen, HelpableScreen):
 	def getOffset(self):
 		return "-E offset" if self.offset is True else ""
 
-	def cbStderrAvail(self, data):
-		#print "[SDGRadio] cbStderrAvail ", data
+	def cbStderrAvail(self, d):
+		#print "[SDGRadio] cbStderrAvail ", d
+		data = d.decode(encoding = "utf8", errors = "ignore")
 		for line in data.splitlines():
 			if not line:
 				continue
