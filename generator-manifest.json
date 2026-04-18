@@ -1,0 +1,24 @@
+{
+  "depends": "",
+  "description": "Enigma2 Software Defined Radio",
+  "legacy_setup": {
+    "description": "Enigma2 Software Defined Radio",
+    "has_setup_translate": true,
+    "name": "enigma2-plugin-extensions-sdgradio",
+    "package_data": [],
+    "package_dir_value": "",
+    "packages": [],
+    "pkg": "Extensions.SDGRadio",
+    "version": "2.0"
+  },
+  "module_dir_name": "SDGRadio",
+  "package_name": "enigma2-plugin-extensions-sdgradio",
+  "plugin_group": "extensions",
+  "source_repo_branch": "master",
+  "source_repo_name": "SDGRadio",
+  "source_repo_url": "https://github.com/oe-mirrors/SDGRadio.git",
+  "target_repo_branch": "main",
+  "target_repo_name": "SDGRadio",
+  "target_repo_url": "git@github.com:oe-alliance-plugins/SDGRadio.git",
+  "version": "2.0"
+}
