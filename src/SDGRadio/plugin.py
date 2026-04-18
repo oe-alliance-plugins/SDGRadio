@@ -54,7 +54,7 @@ config.plugins.SDGRadio.tuning = ConfigSelection(default="simple", choices=[
 ])
 config.plugins.SDGRadio.ppmoffset = ConfigSelectionNumber(-100, 100, 1, 0)
 choicelist = [("automatic", _("auto"))]
-for i in range(0, 51): # 0 to 50
+for i in range(0, 51):  # 0 to 50
 	choicelist.append((str(i)))
 config.plugins.SDGRadio.fmgain = ConfigSelection(default="automatic", choices=choicelist)
 config.plugins.SDGRadio.dabgain = ConfigSelection(default="automatic", choices=choicelist)
@@ -88,12 +88,12 @@ class SDGRadioSetup(ConfigListScreen, Screen):
 
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("OK"))
-		self["description"] = Label("") # filled automatically when calling createSummary()
+		self["description"] = Label("")  # filled automatically when calling createSummary()
 
 		self["setupActions"] = ActionMap(["OkCancelActions", "ColorActions"],
 			{
 				"cancel": self.keyCancel,
-				"red":self.keyCancel,
+				"red": self.keyCancel,
 				"ok": self.keySave,
 				"green": self.keySave
 			}, -2)
@@ -183,12 +183,12 @@ class SDGRadioInput(ConfigListScreen, Screen):
 
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("OK"))
-		self["description"] = Label("") # filled automatically when calling createSummary()
+		self["description"] = Label("")  # filled automatically when calling createSummary()
 
 		self["setupActions"] = ActionMap(["OkCancelActions", "ColorActions"],
 		{
 			"cancel": self.keyCancel,
-			"red":self.keyCancel,
+			"red": self.keyCancel,
 			"ok": self.ok,
 			"green": self.ok
 		}, -2)
@@ -211,7 +211,7 @@ class SDGRadioInput(ConfigListScreen, Screen):
 		ConfigListScreen.__init__(self, configlist, session)
 
 	def ok(self):
-		self.close(str(self.inputfreq.float)) # nothing to save, just pass the value
+		self.close(str(self.inputfreq.float))  # nothing to save, just pass the value
 
 
 class SDGRadioScreen(Screen, HelpableScreen):
@@ -219,11 +219,11 @@ class SDGRadioScreen(Screen, HelpableScreen):
 	def __init__(self, session):
 		self.modulation = config.plugins.SDGRadio.modulation
 		self.frequency = eval("config.plugins.SDGRadio.frequency_%s" % self.modulation.value)
-		self.playbackFrequency = None # currently playing frequency
-		self.playbackPreset = None # currently playing preset
-		self.presets = [] # preset list for current modulation
-		self.log = [] # log messages
-		self.programs = [] # DAB program list
+		self.playbackFrequency = None  # currently playing frequency
+		self.playbackPreset = None  # currently playing preset
+		self.presets = []  # preset list for current modulation
+		self.log = []  # log messages
+		self.programs = []  # DAB program list
 		self.console = None
 
 		Screen.__init__(self, session)
@@ -311,9 +311,9 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		self.onLayoutFinish.extend([self.getConfigOptions, self.getPresets, self.updateFreqWidget,
 									self.updateExtraWidgets, self.redText, self.yellowText, self.blueText])
 
-		self.oldService = self.session.nav.getCurrentlyPlayingServiceReference() # get currently playing service
-		self.session.nav.stopService() # stop currently playing service
-		eConsoleAppContainer().execute("showiframe /usr/share/enigma2/radio.mvi") # display radio mvi
+		self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()  # get currently playing service
+		self.session.nav.stopService()  # stop currently playing service
+		eConsoleAppContainer().execute("showiframe /usr/share/enigma2/radio.mvi")  # display radio mvi
 		#self.Scale = AVSwitch().getFramebufferScale()
 
 	def getConfigOptions(self):
@@ -373,7 +373,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		self.console.execute(cmd)
 
 	def processRds(self, d):
-		data = d.encode(encoding = "utf8", errors = "ignore")
+		data = d.encode(encoding="utf8", errors="ignore")
 		try:
 			rds = json.loads(data.decode("utf8", "ignore"))
 
@@ -483,7 +483,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 
 	def cbStderrAvail(self, d):
 		#print "[SDGRadio] cbStderrAvail ", d
-		data = d.decode(encoding = "utf8", errors = "ignore")
+		data = d.decode(encoding="utf8", errors="ignore")
 		for line in data.splitlines():
 			if not line:
 				continue
@@ -507,7 +507,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		if self.frequency.value != self.playbackFrequency:
 			selPreset = self.playbackPreset
 			if selPreset:
-				self["mem_%d" % selPreset].setPixmapNum(1) # preset stored
+				self["mem_%d" % selPreset].setPixmapNum(1)  # preset stored
 			self.playbackFrequency = self.frequency.value
 			self.playbackPreset = None
 			self.playRadio()
@@ -537,8 +537,8 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		else:
 			if self.tuning == "simple":
 				if self.modulation.value in ("am", "lsb", "usb"):
-					lower = Decimal("0.52") # 520 KHz
-					upper = Decimal("2.0") # 2000 KHz
+					lower = Decimal("0.52")  # 520 KHz
+					upper = Decimal("2.0")  # 2000 KHz
 					if value == Decimal("0.05"):
 						value = Decimal("1")
 					elif value == Decimal("-0.05"):
@@ -547,7 +547,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 						value = Decimal("10")
 					elif value == Decimal("-0.10"):
 						value = Decimal("-10")
-					value = value * Decimal("0.001") # step 1000 times smaller, since we display in KHz
+					value = value * Decimal("0.001")  # step 1000 times smaller, since we display in KHz
 				elif self.modulation.value in ("fm", "nfm"):
 					if self.fmregion == "ru":
 						lower = Decimal("64.0")
@@ -564,7 +564,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 					elif self.fmregion == "amer":
 						lower = Decimal("88.1")
 						upper = Decimal("107.9")
-			else: # advanced mode, no limits
+			else:  # advanced mode, no limits
 				lower = Decimal(SDR_MIN_FREQ)
 				upper = Decimal(SDR_MAX_FREQ)
 
@@ -578,7 +578,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		self.frequency.save()
 		self.updateFreqWidget()
 
-	def freqQuantize(self): # used for cutting extra decimal digits when retuning to "simple" mode
+	def freqQuantize(self):  # used for cutting extra decimal digits when retuning to "simple" mode
 		for mod in ("fm", "nfm"):
 			frequency = eval("config.plugins.SDGRadio.frequency_%s" % mod)
 			value = Decimal(frequency.value).quantize(Decimal("0.1"))
@@ -597,17 +597,17 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		for index, preset in enumerate(presets):
 			self.presets.append(preset)
 			if preset == "0":
-				self["mem_%d" % index].setPixmapNum(0) # preset empty
+				self["mem_%d" % index].setPixmapNum(0)  # preset empty
 			else:
-				self["mem_%d" % index].setPixmapNum(1) # preset stored
+				self["mem_%d" % index].setPixmapNum(1)  # preset stored
 
 	def selectPreset(self, number):
 		newFreq = self.presets[number]
 		selPreset = self.playbackPreset
-		if newFreq != "0" and number != selPreset: # preset not empty and not already selected
-			self["mem_%d" % number].setPixmapNum(2) # preset selected
+		if newFreq != "0" and number != selPreset:  # preset not empty and not already selected
+			self["mem_%d" % number].setPixmapNum(2)  # preset selected
 			if selPreset:
-				self["mem_%d" % selPreset].setPixmapNum(1) # preset stored
+				self["mem_%d" % selPreset].setPixmapNum(1)  # preset stored
 			self.frequency.value = newFreq
 			self.frequency.save()
 			self.playbackFrequency = newFreq
@@ -622,7 +622,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 			self.session.open(MessageBox, msg, MessageBox.TYPE_ERROR, timeout=10, close_on_any_key=True)
 		else:
 			self.presets[number] = currentFreq
-			self["mem_%d" % number].setPixmapNum(1) # preset stored
+			self["mem_%d" % number].setPixmapNum(1)  # preset stored
 			msg = _("Selected frequency successfuly stored to memory preset %d.") % number
 			self.session.open(MessageBox, msg, MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
 
@@ -647,12 +647,12 @@ class SDGRadioScreen(Screen, HelpableScreen):
 			self["key_green"].setText(_("Play"))
 			self.setTitle(_("Software defined radio"))
 			if self.playbackPreset:
-				self["mem_%d" % self.playbackPreset].setPixmapNum(1) # preset stored
+				self["mem_%d" % self.playbackPreset].setPixmapNum(1)  # preset stored
 		else:
 			self["key_green"].setText(_("Stop"))
 			self.setTitle(_("Playing %(freq)s %(units)s") % {"freq": self["freq"].getText().strip("!"), "units": self["freq_units"].getText()})
 
-	def updateFreqWidget(self): # this is for displaying only
+	def updateFreqWidget(self):  # this is for displaying only
 		if self.modulation.value == "dab":
 			self["freq"].setText(self.frequency.value)
 			self["dab_channel"].setText(DAB_FREQ.get(Decimal(self.frequency.value), ""))
@@ -668,7 +668,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 			self["dab_channel"].setText("")
 
 	def updateExtraWidgets(self):
-		self["modulation"].setText(self.modulation.getText()) # current modulation
+		self["modulation"].setText(self.modulation.getText())  # current modulation
 		if self.tuning == "simple":
 			self["freq_off"].setText("")
 			if self.modulation.value in ("am", "lsb", "usb"):
@@ -676,10 +676,10 @@ class SDGRadioScreen(Screen, HelpableScreen):
 			else:
 				self["freq_units"].setText("MHz")
 		elif self.modulation.value == "dab":
-			self["freq_off"].setText("888.888") # 6 digits
+			self["freq_off"].setText("888.888")  # 6 digits
 			self["freq_units"].setText("MHz")
 		else:
-			self["freq_off"].setText("8888.8888") # 8 digits
+			self["freq_off"].setText("8888.8888")  # 8 digits
 			self["freq_units"].setText("MHz")
 
 	def toggleModulation(self):
@@ -688,7 +688,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		self.modulation.selectNext()
 		self.modulation.save()
 		self.frequency = eval("config.plugins.SDGRadio.frequency_%s" % self.modulation.value)
-		self.freqChange(Decimal(0)) # evaluate current frequency and update freq widget
+		self.freqChange(Decimal(0))  # evaluate current frequency and update freq widget
 		self.updateExtraWidgets()
 		self.redText()
 		self.yellowText()
@@ -697,12 +697,12 @@ class SDGRadioScreen(Screen, HelpableScreen):
 
 	def redText(self):
 		idx = self.modulation.index
-		idx = (idx + 1) % len(self.modulation.choices) # get next index (cycle through indices)
+		idx = (idx + 1) % len(self.modulation.choices)  # get next index (cycle through indices)
 		choice = self.modulation.choices[idx]
-		self["key_red"].setText(_("Switch to %s") % self.modulation.description[choice]) # next available modulation
+		self["key_red"].setText(_("Switch to %s") % self.modulation.description[choice])  # next available modulation
 
 	def togglePlayback(self):
-		if self.playbackFrequency is None and self.frequency.value != "0": # not playing
+		if self.playbackFrequency is None and self.frequency.value != "0":  # not playing
 			self.playbackFrequency = self.frequency.value
 			self.playRadio()
 		else:
@@ -712,11 +712,11 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		if self.modulation.value == "fm":
 			config.plugins.SDGRadio.rds.value = not config.plugins.SDGRadio.rds.value
 			config.plugins.SDGRadio.rds.save()
-			if self.playbackFrequency: # playback is active, restart it
+			if self.playbackFrequency:  # playback is active, restart it
 				self.playRadio()
 		elif self.modulation.value == "dab":
 			if self.console:
-				self.console.write("\n") # new line switches to next program
+				self.console.write("\n")  # new line switches to next program
 		self.yellowText()
 
 	def yellowText(self):
@@ -765,7 +765,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 				self.session.open(MessageBox, _("There are no programs available on this frequency."), MessageBox.TYPE_ERROR)
 
 	def showSetup(self):
-		def showSetupCb(retval=True): # KeyCancel returns False, while KeySave returns None!
+		def showSetupCb(retval=True):  # KeyCancel returns False, while KeySave returns None!
 			if retval is True:
 				self.stopRadio()
 				oldtuning = self.tuning
@@ -775,7 +775,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 					self.blueText()
 					if self.tuning == "simple":
 						self.freqQuantize()
-				self.freqChange(Decimal(0)) # evaluate current frequency and update freq widget
+				self.freqChange(Decimal(0))  # evaluate current frequency and update freq widget
 		self.session.openWithCallback(showSetupCb, SDGRadioSetup)
 
 	def showMenu(self):
@@ -784,6 +784,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		choices.append((_("Setup menu"), self.showSetup, "menu"))
 		choices.append((_("Cmd execution log"), self.showLog, "log"))
 		choices.append((_("SDR device information"), self.showInfo, "info"))
+
 		def showMenuCb(choice):
 			if choice is not None:
 				choice[1]()
@@ -815,7 +816,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 		self.doConsoleStop()
 		self.savePresets()
 		config.plugins.SDGRadio.save()
-		eConsoleAppContainer().execute("rtl_eeprom") # hack: run rtl_eeprom to shutdown tuner
+		eConsoleAppContainer().execute("rtl_eeprom")  # hack: run rtl_eeprom to shutdown tuner
 		self.close(False, self.session)
 		self.session.nav.playService(self.oldService)
 
