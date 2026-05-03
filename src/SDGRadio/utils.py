@@ -1,4 +1,3 @@
-from __future__ import print_function
 from collections import OrderedDict
 from decimal import Decimal
 from enigma import addFont, getDesktop
@@ -7,7 +6,7 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
 try:
 	addFont(resolveFilename(SCOPE_PLUGINS, "Extensions/SDGRadio/fonts/DSEG7Classic-BoldItalic.ttf"), "SDGRadio", 100, 1)
-except:
+except Exception:
 	print("[SDGRadio] failed to add font")
 
 

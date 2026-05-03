@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-from __future__ import print_function
 from . import _
 from .utils import SDR_MIN_FREQ, SDR_MAX_FREQ, DAB_FREQ, SKIN
 from Components.ActionMap import HelpableActionMap, ActionMap
@@ -21,7 +19,6 @@ from enigma import eConsoleAppContainer, ePicLoad
 
 import os
 import json
-import time
 import binascii
 from decimal import Decimal
 
@@ -398,7 +395,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 			if "prog_type" in rds and self["prog_type"].getText() != rds["prog_type"]:
 				self["prog_type"].setText(str(rds["prog_type"]))
 
-			if "pi" in rds and not "callsign" in rds and self["pi"].getText() != rds["pi"]:
+			if "pi" in rds and "callsign" not in rds and self["pi"].getText() != rds["pi"]:
 				self["pi"].setText(str(rds["pi"]).replace("0x", "PI: "))
 
 			if "callsign" in rds and self["pi"].getText() != rds["callsign"]:
@@ -407,7 +404,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 			if "callsign_uncertain" in rds and self["pi"].getText() != rds["callsign_uncertain"]:
 				self["pi"].setText(str(rds["callsign_uncertain"]))
 
-			if "pi" in rds and not str(rds["pi"]) == "0x0000" or "callsign" in rds or "callsign_uncertain" in rds or "pi" in rds and str(rds["pi"]) == "0x0000" or "partial_ps" in rds and str(rds["pi"]) == "0x0000":
+			if "pi" in rds and str(rds["pi"]) != "0x0000" or "callsign" in rds or "callsign_uncertain" in rds or "pi" in rds and str(rds["pi"]) == "0x0000" or "partial_ps" in rds and str(rds["pi"]) == "0x0000":
 				self["rds_icon"].show()
 
 			if "programType" in rds:
@@ -489,7 +486,7 @@ class SDGRadioScreen(Screen, HelpableScreen):
 				continue
 			if "{" in line and "}" in line and ":" in line:
 				self.processRds(line)
-		if not data in self.log:
+		if data not in self.log:
 			self.log.append(data)
 		while len(self.log) > 200:
 			self.log.pop(0)
