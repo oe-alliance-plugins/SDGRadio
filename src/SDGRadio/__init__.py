@@ -5,16 +5,18 @@ import gettext
 LOCALES_DOMAIN = "SDGRadio"
 LOCALES_RELPATH = "Extensions/SDGRadio/locale"
 
+PluginLanguageDomain = "SDGRadio"
+
 
 def _locale_init():
 	gettext.bindtextdomain(
-		LOCALES_DOMAIN,
+		PluginLanguageDomain,
 		resolveFilename(SCOPE_PLUGINS, LOCALES_RELPATH))
 
 
 def _(txt):
 	try:
-		t = gettext.dgettext(LOCALES_DOMAIN, txt)
+		t = gettext.dgettext(PluginLanguageDomain, txt)
 		if t == txt:
 			t = gettext.gettext(txt)
 		return t
